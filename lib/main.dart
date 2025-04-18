@@ -1,3 +1,4 @@
+import 'package:chatapp/screens/chat_screen.dart';
 import 'package:chatapp/screens/login_screen.dart';
 import 'package:chatapp/screens/registration_screen.dart';
 import 'package:chatapp/screens/welcome_screen.dart';
@@ -14,12 +15,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      theme: ThemeData.dark().copyWith(
+        textTheme: TextTheme(
+          bodyMedium: TextStyle(color: Colors.black54)
+        ),
       ),
-      home: RegistrationScreen()
+      initialRoute:'welcome_screen' ,
+      routes: {
+        'welcome_screen':(context)=>WelcomeScreen(),
+        'login_screen':(context)=>LoginScreen(),
+        'registration_screen':(context)=>RegistrationScreen(),
+        'chat_screen':(context)=>ChatScreen(),
+      },
+
     );
   }
 }
