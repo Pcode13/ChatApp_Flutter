@@ -13,15 +13,27 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
   late AnimationController controller;
   late Animation animation;
 
+
+
   @override
   void initState() {
     controller =
-        AnimationController(duration: Duration(seconds: 1), vsync: this,upperBound: 100.0);
+        AnimationController(duration: Duration(seconds: 1), vsync: this);
     // animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
     //     .animate(controller);
-    controller.forward();
+    animation = CurvedAnimation(parent: controller, curve: Curves.decelerate);
+    controller.reverse(from: 1.0);
+
+    animation.addStatusListener((status){
+      if(status == AnimationStatus.completed){
+            controller.reverse(from: 1.0);
+          }else if(status == AnimationStatus.dismissed) {
+            controller.forward();
+          }
+    });
     controller.addListener(() {
       setState(() {});
+      print(animation.value);
     });
   }
 
@@ -34,7 +46,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: animation.value,
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -46,7 +58,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                 Hero(
                   tag: 'logo',
                   child: SizedBox(
-                    height: 60.0,
+                    height:animation.value *100,
                     child: Image.asset('images/logo.png'),
                   ),
                 ),
