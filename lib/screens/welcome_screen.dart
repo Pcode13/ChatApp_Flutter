@@ -1,3 +1,4 @@
+import 'package:chatapp/components/RoundedButton.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
@@ -22,18 +23,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     // animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
     //     .animate(controller);
     animation = CurvedAnimation(parent: controller, curve: Curves.decelerate);
-    controller.reverse(from: 1.0);
-
-    animation.addStatusListener((status){
-      if(status == AnimationStatus.completed){
-            controller.reverse(from: 1.0);
-          }else if(status == AnimationStatus.dismissed) {
-            controller.forward();
-          }
-    });
+    controller.forward();
+    // animation.addListener((listener){
+    //   if(listener == AnimationStatus.completed){
+    //     controller.reverse(from: 1.0);
+    //   }else if(listener == AnimationStatus.dismissed) {
+    //     controller.forward();
+    //   }
+    //   } as VoidCallback)
+    // });
+    // animation.addStatusListener((status){
+    //   if(status == AnimationStatus.completed){
+    //         controller.reverse(from: 1.0);
+    //       }else if(status == AnimationStatus.dismissed) {
+    //         controller.forward();
+    //       }
+    // });
     controller.addListener(() {
       setState(() {});
-      print(animation.value);
+      // print(animation.value);
     });
   }
 
@@ -72,37 +80,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
               ],
             ),
             const SizedBox(height: 48.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                elevation: 5.0,
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, LoginScreen.id);
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: const Text('Log In'),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                elevation: 5.0,
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, RegistrationScreen.id);
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: const Text('Register'),
-                ),
-              ),
+           RoundedButton(
+             title: 'Log In',
+             colour: Colors.lightBlueAccent,
+             onPressed: () {
+               Navigator.pushNamed(context, LoginScreen.id);
+             },
+           ),
+            RoundedButton(
+              title: 'Register',
+              colour: Colors.blueAccent,
+              onPressed: () {
+                Navigator.pushNamed(context, RegistrationScreen.id);
+              },
             ),
           ],
         ),
