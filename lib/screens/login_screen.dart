@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../components/RoundedButton.dart';
 import '../constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'chat_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   // const LoginScreen({super.key});
@@ -12,7 +14,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final  _auth = FirebaseAuth.instance;
+  String email = "";
+  String password = "";
+
+
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -31,9 +39,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 48.0,),
             TextField(
-              onChanged: (value){
-
-              },
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.emailAddress,
+              onChanged: (value)=>email = value,
               decoration:kTextFieldDecoration.copyWith(hintText: 'Enter your email')
 
             ),
@@ -41,9 +49,9 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 8.0,
             ),
             TextField(
-              onChanged: (value){
-
-              },
+              textAlign: TextAlign.center,
+              obscureText: true,
+              onChanged: (value)=>password = value,
               decoration:kTextFieldDecoration.copyWith(hintText: 'Enter your password')
             ),
             SizedBox(
@@ -52,8 +60,18 @@ class _LoginScreenState extends State<LoginScreen> {
             RoundedButton(
               title: 'Log In',
               colour: Colors.lightBlueAccent,
-              onPressed: () {
-                Navigator.pushNamed(context, LoginScreen.id);
+              onPressed: ()async {
+                try{
+                  final UserCredential userCredential =
+                      await _auth.signInWithEmailAndPassword(
+                      email: email, password: password);
+                  if (userCredential.user != null) {
+                    Navigator.pushNamed(context, ChatScreen.id);
+                  }
+                }catch(e){
+                  print(e);
+                }
+                // Navigator.pushNamed(context, LoginScreen.id);
               },
             ),
           ],
