@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 
 import '../components/RoundedButton.dart';
 import '../constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'chat_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
-
   static const String id = 'registration_screen';
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _auth = FirebaseAuth.instance;
+  String email = "";
+  String password = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,34 +34,41 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 child: Image.asset('images/logo.png'),
               ),
             ),
-            SizedBox(
-              height: 48.0,
-            ),
+            SizedBox(height: 48.0),
             TextField(
-              onChanged: (value) {
-                //Do something with the user input.
-              },
-              decoration:
-              kTextFieldDecoration.copyWith(hintText: 'Enter your email')
+              keyboardType: TextInputType.emailAddress,
+              textAlign: TextAlign.center,
+              onChanged: (value) =>email = value,
+              decoration: kTextFieldDecoration.copyWith(
+                hintText: 'Enter your email',
+              ),
             ),
-            SizedBox(
-              height: 8.0,
-            ),
+            SizedBox(height: 8.0),
             TextField(
-              onChanged: (value) {
-                //Do something with the user input.
-              },
-              decoration:
-             kTextFieldDecoration.copyWith(hintText: 'Enter your password')
+              textAlign: TextAlign.center,
+              obscureText: true,
+              onChanged: (value)=> password = value,
+              decoration: kTextFieldDecoration.copyWith(
+                hintText: 'Enter your password',
+              ),
             ),
-            SizedBox(
-              height: 24.0,
-            ),
+            SizedBox(height: 24.0),
             RoundedButton(
               title: 'Register',
               colour: Colors.blueAccent,
-              onPressed: () {
-                Navigator.pushNamed(context, RegistrationScreen.id);
+              onPressed: () async {
+                try {
+                  final newUser = await _auth.createUserWithEmailAndPassword(
+                    email: email,
+                    password: password,
+                  );
+                  if(newUser.user != null){
+                    Navigator.pushNamed(context, ChatScreen.id);
+                  }
+                } catch (e) {
+                  print(e);
+                }
+
               },
             ),
           ],

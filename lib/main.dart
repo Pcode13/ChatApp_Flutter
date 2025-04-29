@@ -3,8 +3,11 @@ import 'package:chatapp/screens/login_screen.dart';
 import 'package:chatapp/screens/registration_screen.dart';
 import 'package:chatapp/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -15,12 +18,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
-
-        textTheme: TextTheme(
-          bodyMedium: TextStyle(color: Colors.black54)
-        ),
-      ),
       initialRoute:WelcomeScreen.id,
       routes: {
         WelcomeScreen.id:(context)=>WelcomeScreen(),
